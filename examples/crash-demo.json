@@ -1,0 +1,11 @@
+{
+  "workflow_id": "crash-demo-001",
+  "steps": [
+    { "id": "validate", "type": "activity", "name": "validate_order", "input": { "order_id": "ORD-CRASH-1" } },
+    { "id": "payment", "type": "activity", "name": "process_payment", "depends_on": ["validate"],
+      "input": { "order_id": "${steps.validate.output.order_id}", "amount": 49.5, "_fault": "crash_after_charge" },
+      "timeouts": { "start_to_close_seconds": 30, "heartbeat_seconds": 5 },
+      "retry": { "maximum_attempts": 3, "initial_interval_seconds": 1 } },
+    { "id": "notification", "type": "activity", "name": "send_notification", "depends_on": ["payment"], "input": { "recipient": "crash-demo@example.com" } }
+  ]
+}

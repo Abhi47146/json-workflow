@@ -1,0 +1,8 @@
+{
+  "workflow_id": "invalid-circular",
+  "steps": [
+    { "id": "a", "type": "activity", "name": "echo", "depends_on": ["c"] },
+    { "id": "b", "type": "activity", "name": "echo", "depends_on": ["a"] },
+    { "id": "c", "type": "activity", "name": "echo", "depends_on": ["b"] }
+  ]
+}

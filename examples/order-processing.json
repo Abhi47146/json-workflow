@@ -1,0 +1,8 @@
+{
+  "workflow_id": "order-processing-001",
+  "steps": [
+    { "id": "validate", "type": "activity", "name": "validate_order", "input": { "order_id": "ORD-1001" } },
+    { "id": "payment", "type": "activity", "name": "process_payment", "depends_on": ["validate"], "retry": { "maximum_attempts": 3 } },
+    { "id": "notification", "type": "activity", "name": "send_notification", "depends_on": ["payment"] }
+  ]
+}

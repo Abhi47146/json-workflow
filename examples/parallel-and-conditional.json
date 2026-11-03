@@ -1,0 +1,16 @@
+{
+  "workflow_id": "parallel-demo-001",
+  "failure_policy": "fail_fast",
+  "input": { "order_id": "ORD-2002" },
+  "steps": [
+    { "id": "validate", "type": "activity", "name": "validate_order", "input": { "order_id": "${input.order_id}", "amount": 900 } },
+    { "id": "reserve", "type": "activity", "name": "reserve_inventory", "depends_on": ["validate"], "input": { "sku": "SKU-9", "quantity": 2 } },
+    { "id": "fraud_check", "type": "activity", "name": "sleep", "depends_on": ["validate"], "input": { "seconds": 3 } },
+    { "id": "manual_review", "type": "wait_signal", "signal": "review_done", "depends_on": ["fraud_check"],
+      "condition": { "step": "validate", "path": "amount", "op": "gt", "value": 500 }, "timeout_seconds": 86400 },
+    { "id": "payment", "type": "activity", "name": "process_payment", "depends_on": ["reserve", "manual_review"],
+      "trigger_rule": "all_done", "input": { "order_id": "${steps.validate.output.order_id}", "amount": "${steps.validate.output.amount}" },
+      "retry": { "maximum_attempts": 5, "initial_interval_seconds": 1, "backoff_coefficient": 2 }, "timeouts": { "start_to_close_seconds": 30 } },
+    { "id": "notify", "type": "activity", "name": "send_notification", "depends_on": ["payment"] }
+  ]
+}

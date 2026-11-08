@@ -4,7 +4,6 @@ Submit a JSON workflow definition over HTTP; it is validated, then interpreted a
 
 * Design, diagrams, challenge write-ups, trade-offs: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**
 * JSON schema: [wfengine/schema/workflow.schema.json](wfengine/schema/workflow.schema.json) (also served at `GET /schema`)
-* Video script: [docs/VIDEO_SCRIPT.md](docs/VIDEO_SCRIPT.md)
 
 ## Layout
 
